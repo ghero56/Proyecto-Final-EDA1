@@ -1,9 +1,10 @@
 import os
+from tkinter import *
 # estáticas
 DATOS = [['No. Producto','Nombre de Producto','Precio de Producto']]
 CON = 'root'
 
-# funciones
+# funciones para consola
 #---------------------------------------------------#
 def Menu():
     op = input("\n¿Qué deseas hacer?\n\n\t1) Ingresar nuevo producto\n\n\t2) Leer la lista de productos\n\n\t3) Editar datos\n\n\t4) Borrar datos\n\n\t5) Guardar archivo\n\n\t6) salir\n\n\t\t->")
@@ -110,10 +111,29 @@ def Ingresar():
     return Ban
 
 #---------------------------------------------------#
-# main
-Bandera = Ingresar()
-while(Bandera):
-    op = Menu()
-    if(op.isdigit()):
-        if (int(op) == 6):
-            break
+# Inicio Sesion
+root = Tk()
+root.title("Iniciar Sesion")
+root.config(
+    width = 600 ,
+    height = 400
+)
+
+Inicio_sesion = Frame()
+Inicio_sesion.pack()
+
+Inicio_sesion.config(
+    width = 600 ,
+    height = 400
+)
+
+Label(Inicio_sesion, text="Ingresa la contraseña").grid(row=0,column=0)
+contraseña = Entry(Inicio_sesion)
+contraseña.grid(row=0,column=1)
+if(contraseña.get() == CON):
+    print("acceso correcto")
+else:
+    print("acceso correcto")
+
+root.mainloop()
+# Inicio Sesion
