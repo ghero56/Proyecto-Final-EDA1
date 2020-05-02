@@ -1,139 +1,234 @@
-import os
+from tkinter import ttk
 from tkinter import *
-# estáticas
-DATOS = [['No. Producto','Nombre de Producto','Precio de Producto']]
-CON = 'root'
 
-# funciones para consola
-#---------------------------------------------------#
-def Menu():
-    op = input("\n¿Qué deseas hacer?\n\n\t1) Ingresar nuevo producto\n\n\t2) Leer la lista de productos\n\n\t3) Editar datos\n\n\t4) Borrar datos\n\n\t5) Guardar archivo\n\n\t6) salir\n\n\t\t->")
-    if op.isdigit():
-        if(int(op) == 1):
-            Llenar()
-        elif(int(op) == 2):
-            Leer()
-        elif(int(op) == 3):
-            Editar(int(op))
-        elif(int(op) == 4):
-            Editar(int(op))
-        elif(int(op) == 5):
-            Guardar()
-        elif(int(op) == 6):
-            print('Hasta Luego\n')
-    else:
-        os.system('cls')
-        enter = input("\n\n\n\n\tintenta nuevamente\n*****************PRESIONA ENTER*****************")
-        os.system('cls')
-    return op
+import Base
 
-#---------------------------------------------------#
-def Llenar():
-    os.system('cls')
-    aux = []
-    aux.append(len(DATOS))
-    for i in range(1,3,1):
-        aux.append(input('\nIngresa el {}: '.format(DATOS[0][i])))
-    DATOS.append(aux)
-    bandera = input("\n\t¿Deseas añadir mas? (Y/N): ")
-    if bandera.upper() == 'Y':
-        Llenar()
-    else:
-        ENTER=input("\n\n\n\nProducto(s) Agregado(s) correctamente \n\n\n\t(PRESIONA ENTER PARA CONTINUAR)\n")
-        os.system('cls')
+class Productos:
 
-#---------------------------------------------------#
-def Leer():
-    os.system('cls')
-    for i in DATOS:
-        for j in i:
-            print(j," ", end="")
-        print("\n")
+    def LlenarArbol(self):
+        # para limpiar el arbol
+        residual = self.tabla.get_children()
+        for i in residual:
+            self.tabla.delete(i)
 
-#---------------------------------------------------#
-def OrdenarNum():
-    for i in range(len(DATOS)-1,0,-1):
-        DATOS[i][0] = i
+        # conexión y consulta
+        Llenar = Base.read()
+        for datos in Llenar:
+            self.tabla.insert("",0,text=datos[1],values=datos[2]) # se mandan los datos a la interfaz
 
-#---------------------------------------------------#
-def Borrar(auxiliar):
-    DATOS.pop(auxiliar)
-    OrdenarNum()
+    def LlenarBase(self):
+        if(len(self.Nombre.get()) !=0 and len(self.Precio.get()) !=0):
+            Parametros = (self.Nombre.get(), self.Precio.get())
+            Base.add(Parametros)
+            self.Mensaje['text']='Producto {} añadido correctamente'.format((self.Nombre.get()).title())
+            self.Nombre.delete(0,END)
+            self.Precio.delete(0,END)
+        else:
+            self.Mensaje['text']='Datos Faltantes'
+        self.LlenarArbol()
 
-#---------------------------------------------------#
-def Editar(opcion):
-    os.system('cls')
-    if ( int(opcion) == 3 ):
-        print('¿Cuál deseas editar?')
-    else:
-        print('¿Cuál deseas borrar?')
-    for i in range(1,len(DATOS),1):
-        print(str(i) + ") " + DATOS[i][1])
-    aux = input("\t->")
-    if aux.isdigit() :
-        aux = int(aux)
-        if opcion == 4 :
-            Borrar(aux)
-            print("Borrado con éxito\n")
-        else :
-            for i in range(1,3,1):
-                DATOS[aux].pop()
-                listEdit = input('\nIngresa el {}: '.format(DATOS[0][i]))
-                DATOS[aux].insert(i,listEdit)
-            bandera = input("\n\t¿Deseas Editar mas? (Y/N): ")
-            if bandera.upper() == 'Y':
-                Editar(3)
-            ENTER = input("\n\n\nProducto(s) Editado(s) correctamente \n\n\n\t(PRESIONA ENTER PARA CONTINUAR)\n")
-            os.system('cls')
-    else:
-        Editar(opcion)
+    def BorrarProd(self):
+        self.Mensaje['text']=''
+        try:
+            self.tabla.item(self.tabla.selection())['text'][0]
+        except IndexError as e:
+            self.Mensaje['text'] = 'Selecciona un dato'
+            return
+        self.Mensaje['text']=''
+        parametro = self.tabla.item(self.tabla.selection())['text']
+        Base.remove(parametro)
+        self.Mensaje['text'] = 'Artículo {} eliminado correctamente'.format(parametro)
+        self.LlenarArbol()
 
-#---------------------------------------------------#
-def Guardar():
-    os.system('cls')
-    residual = open("test.txt","w")
-    for i in range(1,len(DATOS),1) :
-        for j in DATOS[i]:
-            residual.writelines("{}".format(j) + "\t")
-        residual.write("\n")
-    residual.close()
-    print("Guardado")
+    def EditarProd(self):
+        self.Mensaje['text']=''
+        try:
+            self.tabla.item(self.tabla.selection())['text'][0]
+        except IndexError as e:
+            self.Mensaje['text'] = 'Selecciona un dato'
+            return
+        self.Mensaje['text']=''
+        n = self.tabla.item(self.tabla.selection())['text']
+        p = self.tabla.item(self.tabla.selection())['values'][0]
+        self.edicion = Toplevel() # ventana encima de la anterior
+        self.edicion.title="Edición de productos"
+        # nombre anterior
+        Label(
+            self.edicion,
+            text='Nombre Actual'
+        ).grid(
+            row=0,
+            column=1
+        )
+        Entry(
+            self.edicion,
+            textvariable=StringVar(self.edicion,value=n),
+            state='readonly'
+        ).grid(
+            row=0,
+            column=2
+        )
+        # nuevo nombre
+        Label(
+            self.edicion,
+            text='Nuevo Nombre'
+        ).grid(
+            row=1,
+            column=1
+        )
+        nuevoDatoN = Entry(
+            self.edicion
+        )
+        nuevoDatoN.grid(
+            row=1,
+            column=2
+        )
+        # precio anterior
+        Label(
+            self.edicion,
+            text='Precio Anterior'
+        ).grid(
+            row=2,
+            column=1
+        )
+        Entry(
+            self.edicion,
+            textvariable=StringVar(self.edicion,value=p),
+            state='readonly'
+        ).grid(
+            row=2,
+            column=2
+        )
+        # nuevo precio
+        Label(
+            self.edicion,text='Nuevo Precio'
+        ).grid(
+            row=3,
+            column=1
+        )
+        nuevoDatoP=Entry(
+            self.edicion
+        )
+        nuevoDatoP.grid(
+            row=3,column=2
+        )
+        # Base.edit(n,p)
+        Button(
+            self.edicion,
+            text='Actualizar',
+            command=lambda:Base.edit(self,nuevoDatoN.get(),nuevoDatoP.get(),n,p)
+        ).grid(row=4,column=2,sticky=W)
 
-#---------------------------------------------------#
-def Ingresar():
-    os.system('cls')
-    contraseña = input("\n\n\tIngresa la contraseña de acceso -> ")
-    if (contraseña == CON):
-        Ban = True
-    else:
-        os.system('cls')
-        Ban = Ingresar()
-    return Ban
+    def __init__(self,root):
+        self.wind = root # se coloca la raiz dentro de un atributo de la clase
+        self.wind.title("Gestión de Productos") # titulo de la ventana
 
-#---------------------------------------------------#
-# Inicio Sesion
-root = Tk()
-root.title("Iniciar Sesion")
-root.config(
-    width = 600 ,
-    height = 400
-)
+        # contenedor principal
+        frame = LabelFrame(
+            self.wind, # Frame contenido en wind (root)
+            text="Registrar nuevo Producto" # texto a mostrar
+        )
+        frame.grid( # ubicacion
+            row=0, # fila
+            column=0, # columna
+            columnspan=3, # tamaño de 3 columnas
+            pady=20 # espacio vertical
+        )
 
-Inicio_sesion = Frame()
-Inicio_sesion.pack()
+        # label del nombre
+        Label(
+            frame,
+            text='Nombre'
+        ).grid(
+            row=1,
+            column=0
+        )
+        self.Nombre = Entry(frame)
+        self.Nombre.focus()
+        self.Nombre.grid(
+            row=1,
+            column=1
+        )
 
-Inicio_sesion.config(
-    width = 600 ,
-    height = 400
-)
+        # label precio
+        Label(
+            frame,
+            text='Precio'
+        ).grid(
+            row=2,
+            column=0
+        )
+        self.Precio=Entry(frame)
+        self.Precio.focus()
+        self.Precio.grid(
+            row=2,
+            column=1
+        )
 
-Label(Inicio_sesion, text="Ingresa la contraseña").grid(row=0,column=0)
-contraseña = Entry(Inicio_sesion)
-contraseña.grid(row=0,column=1)
-if(contraseña.get() == CON):
-    print("acceso correcto")
-else:
-    print("acceso correcto")
+        # boton Guardar
+        ttk.Button(
+            frame,
+            text='Guardar',
+            command=lambda:self.LlenarBase()
+        ).grid(
+            row=3,
+            columnspan=2,
+            sticky=W+E
+        )
+        # boton Borrar
+        ttk.Button(# estará en la raiz, no lo incluyo al frame
+            text='Borrar',
+            command=lambda:self.BorrarProd()
+        ).grid(
+            row=5,
+            column=0,
+            sticky=W+E
+        )
+        # boton Editar
+        ttk.Button(# estará en la raiz, no lo incluyo al frame
+            text='Editar',
+            command=lambda:self.EditarProd()
+        ).grid(
+            row=5,
+            column=1,
+            sticky=W+E
+        )
 
-root.mainloop()
-# Inicio Sesion
+        # notificación
+        self.Mensaje = Label(
+            text='',
+            fg='red'
+        )
+        self.Mensaje.grid(
+            row=3,
+            column=0,
+            columnspan=2,
+            sticky=W+E
+        )
+
+        # arbol de productos
+        self.tabla = ttk.Treeview(
+            height=10,
+            columns=2
+        )
+        self.tabla.grid(
+            row=4,
+            column=0,
+            columnspan=2
+        )
+        self.tabla.heading(
+            '#0',
+            text='NOMBRE',
+            anchor=CENTER
+        )
+        self.tabla.heading(
+            '#1',
+            text='PRECIO',
+            anchor=CENTER
+        )
+        self.LlenarArbol() # llenar el arbol anterior
+
+if __name__ == '__main__':
+    root = Tk()
+    Productos(root)
+    root.mainloop()
