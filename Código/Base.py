@@ -7,19 +7,40 @@ f3 = "INSERT INTO prod VALUES(NULL, ?, ?)"
 f4 = "DELETE FROM prod WHERE NOMBRE_ARTICULO = ?"
 f5 = "UPDATE prod SET NOMBRE_ARTICULO = ?, PRECIO = ? WHERE NOMBRE_ARTICULO = ? AND PRECIO = ?"
 
+fy = "CREATE TABLE users (Usuario VARCHAR(8), Contrasena VARCHAR(10))"
+fx = "SELECT * FROM users"
+fz = "INSERT INTO users VALUES(?, ?)"
+
+def createOnce(): # creación única de la tabla
+    Conexión = sqlite3.connect("users")
+    Cursor = Conexión.cursor()
+    Cursor.execute(fy)
+    Conexión.commit()
+    Cursor.execute(fz,('fernando','root'))
+    Conexión.commit()
+    Conexión.close()
+
+def OnlyRead(): # creación única de la tabla
+    Conexión = sqlite3.connect("users")
+    Cursor = Conexión.cursor()
+    comprobante = Cursor.execute(fx)
+    for i in comprobante:
+        return i
+    Conexión.commit()
+    Conexión.close()
+
 def create(): # creación única de la tabla
     Conexión = sqlite3.connect("DataCenter")
     Cursor = Conexión.cursor()
-    Cursor.execute(
-        f1
-    )
+    Cursor.execute(f1)
     Conexión.close()
 
 def remove(param):
     Conexión = sqlite3.connect("DataCenter")
     Cursor = Conexión.cursor()
     Cursor.execute(
-        f4,(param,)
+        f4,
+        (param,)
     )
     Conexión.commit()
     Conexión.close()
@@ -27,9 +48,7 @@ def remove(param):
 def read():
     Conexión = sqlite3.connect("DataCenter")
     Cursor = Conexión.cursor()
-    Datos = Cursor.execute(
-        f2
-    )
+    Datos = Cursor.execute(f2)
     Conexión.commit()
     return Datos
     Conexión.close()

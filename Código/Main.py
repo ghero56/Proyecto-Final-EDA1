@@ -1,3 +1,4 @@
+import os
 from tkinter import ttk
 from tkinter import *
 
@@ -5,7 +6,7 @@ import Base
 
 class Productos:
 
-    def LlenarArbol(self):
+    def LlenarArbol(self): # funcion para actualizar la tabla
         # para limpiar el arbol
         residual = self.tabla.get_children()
         for i in residual:
@@ -16,16 +17,16 @@ class Productos:
         for datos in Llenar:
             self.tabla.insert("",0,text=datos[1],values=datos[2]) # se mandan los datos a la interfaz
 
-    def LlenarBase(self):
+    def LlenarBase(self): # funcion para llenar la base
         if(len(self.Nombre.get()) !=0 and len(self.Precio.get()) !=0):
             Parametros = (self.Nombre.get(), self.Precio.get())
-            Base.add(Parametros)
+            Base.add(Parametros) # funcion para conectar y ejecutar
             self.Mensaje['text']='Producto {} añadido correctamente'.format((self.Nombre.get()).title())
             self.Nombre.delete(0,END)
             self.Precio.delete(0,END)
         else:
             self.Mensaje['text']='Datos Faltantes'
-        self.LlenarArbol()
+        self.LlenarArbol() # mandamos llamar la funcion par aactualizar la pantalla
 
     def BorrarProd(self):
         self.Mensaje['text']=''
@@ -121,7 +122,9 @@ class Productos:
 
     def __init__(self,root):
         self.wind = root # se coloca la raiz dentro de un atributo de la clase
-        self.wind.title("Gestión de Productos") # titulo de la ventana
+        self.wind.title(  # titulo de la ventana
+            "Gestión de Productos"
+        )
 
         # contenedor principal
         frame = LabelFrame(
@@ -228,7 +231,21 @@ class Productos:
         )
         self.LlenarArbol() # llenar el arbol anterior
 
-if __name__ == '__main__':
+def iniciar():
     root = Tk()
-    Productos(root)
+    Productos(root) # se instancia la pantalla principal
     root.mainloop()
+    os.system('cls')
+
+'''Barramenu = Menu(root)
+root.config(menu=Barramenu)
+
+archivoMenu=Menu(Barramenu)
+edicionMenu=Menu(Barramenu)
+herramientasMenu=Menu(Barramenu)
+ayudaMenu=Menu(Barramenu)
+
+Barramenu.add_cascade(label='Archivo',menu=archivoMenu)
+Barramenu.add_cascade(label='Edición',menu=edicionMenu)
+Barramenu.add_cascade(label='Herramientas',menu=herramientasMenu)
+Barramenu.add_cascade(label='Ayuda',menu=ayudaMenu)'''
