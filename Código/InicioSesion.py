@@ -32,6 +32,7 @@ Logo.grid(row=0,column=0,rowspan=3)
 # Cuadro de Texto Para el Usuario
 User=Label(MainFrame,text="Usuario: ")
 User.grid(row=1,column=1)
+User.focus()
 UserEn=Entry(MainFrame)
 UserEn.grid(row=1,column=2)
 

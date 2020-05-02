@@ -10,6 +10,8 @@ f5 = "UPDATE prod SET NOMBRE_ARTICULO = ?, PRECIO = ? WHERE NOMBRE_ARTICULO = ? 
 fy = "CREATE TABLE users (Usuario VARCHAR(8), Contrasena VARCHAR(10))"
 fx = "SELECT * FROM users"
 fz = "INSERT INTO users VALUES(?, ?)"
+fc = "UPDATE users SET Usuario = ? WHERE Usuario = ? AND Contrasena = ?"
+fu = "UPDATE users SET Contrasena = ? WHERE Usuario = ? AND Contrasena = ?"
 
 def createOnce(): # creación única de la tabla
     Conexión = sqlite3.connect("users")
@@ -28,6 +30,22 @@ def OnlyRead(): # creación única de la tabla
         return i
     Conexión.commit()
     Conexión.close()
+
+def CambioContra(tipo,cambios):
+    old = OnlyRead()
+    list = (cambios,old[0],old[1])
+    if tipo == "user":
+        Conexión = sqlite3.connect("users")
+        Cursor = Conexión.cursor()
+        Cursor.execute(fc,list)
+        Conexión.commit()
+        Conexión.close()
+    else:
+        Conexión = sqlite3.connect("users")
+        Cursor = Conexión.cursor()
+        Cursor.execute(fu,list)
+        Conexión.commit()
+        Conexión.close()
 
 def create(): # creación única de la tabla
     Conexión = sqlite3.connect("DataCenter")

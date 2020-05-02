@@ -1,10 +1,111 @@
 import os
 from tkinter import ttk
 from tkinter import *
+from tkinter import messagebox
 
 import Base
 
 class Productos:
+    def info(self):
+        messagebox.showinfo('Gestor Universal', 'Proyecto Final de Estructuras de Datos y Algoritmos 1\n\nHecho por: Fernando Arciga Guzmán\n\nAsesorado por: Marco Antonio Martinez Quintana')
+
+    def guarninguser(self,n,N):
+        valor=messagebox.askokcancel('Gestor Universal', ('Realmente deseas cambiar el usuario {} por {}').format(n,N))
+        if valor:
+            self.nameedit.destroy()
+            Base.CambioContra("user",N)
+
+    def guarningcontra(self,n,N):
+        valor=messagebox.askokcancel('Gestor Universal', ('Realmente deseas cambiar la contraseña {} por {}').format(n,N))
+        if valor:
+            self.conedit.destroy()
+            Base.CambioContra("con",N)
+
+    def exit(self):
+        valor=messagebox.askquestion("Saliendo", "¿Realmente deseas salir?")
+        if valor == "yes":
+            self.wind.destroy()
+
+    def Usrio(self):
+        compro = Base.OnlyRead()
+        self.nameedit = Toplevel() # ventana encima de la anterior
+        self.nameedit.title="Edición de cuentas"
+        Label(
+            self.nameedit,
+            text="Nombre Actual"
+        ).grid(
+            row=0,
+            column=1
+        )
+        Entry(
+            self.nameedit,
+            textvariable=StringVar(self.nameedit,value=compro[0]),
+            state='readonly'
+        ).grid(
+            row=0,
+            column=2
+        )
+        # nuevo nombre
+        Label(
+            self.nameedit,
+            text='Nuevo Nombre'
+        ).grid(
+            row=1,
+            column=1
+        )
+        nuevoDatoN = Entry(
+            self.nameedit
+        )
+        nuevoDatoN.grid(
+            row=1,
+            column=2
+        )
+        Button(
+            self.nameedit,
+            text='Actualizar',
+            command=lambda:self.guarninguser(compro[0],nuevoDatoN.get())
+        ).grid(row=4,column=2,sticky=W)
+
+    def Consena(self):
+        compro = Base.OnlyRead()
+        self.conedit = Toplevel() # ventana encima de la anterior
+        self.conedit.title="Edición de cuentas"
+        Label(
+            self.conedit,
+            text="Contraseña Actual"
+        ).grid(
+            row=0,
+            column=1
+        )
+        Entry(
+            self.conedit,
+            textvariable=StringVar(self.conedit,value=compro[1]),
+            state='readonly'
+        ).grid(
+            row=0,
+            column=2
+        )
+        # nuevo nombre
+        Label(
+            self.conedit,
+            text='Nueva Contraseña'
+        ).grid(
+            row=1,
+            column=1
+        )
+        nuevoDatoN = Entry(
+            self.conedit
+        )
+        nuevoDatoN.grid(
+            row=1,
+            column=2
+        )
+        # Base.edit(n,p)
+        Button(
+            self.conedit,
+            text='Actualizar',
+            command=lambda:self.guarningcontra("con",nuevoDatoN.get())
+        ).grid(row=4,column=2,sticky=W)
 
     def LlenarArbol(self): # funcion para actualizar la tabla
         # para limpiar el arbol
@@ -122,9 +223,32 @@ class Productos:
 
     def __init__(self,root):
         self.wind = root # se coloca la raiz dentro de un atributo de la clase
-        self.wind.title(  # titulo de la ventana
-            "Gestión de Productos"
-        )
+        BarraMenu = Menu(self.wind)
+        self.wind.config(menu=BarraMenu)
+        self.wind.title("Gestión de Productos")
+
+        archivo=Menu(BarraMenu,tearoff=0)
+        archivo.add_command(label="Nueva Tabla")
+        archivo.add_command(label="Guardar como...")
+        archivo.add_separator()
+        archivo.add_command(label="Salir",command=lambda:self.exit())
+
+        Editar=Menu(BarraMenu,tearoff=0)
+        Editar.add_command(label="Copiar")
+        Editar.add_command(label="Cortar")
+        Editar.add_command(label="Eliminar")
+
+        Herramientas=Menu(BarraMenu,tearoff=0)
+        Herramientas.add_command(label="Cambiar Usuario",command=lambda:self.Usrio())
+        Herramientas.add_command(label="Cambiar Contraseña",command=lambda:self.Consena())
+
+        Ayuda=Menu(BarraMenu,tearoff=0)
+        Ayuda.add_command(label="Acerca de...",command=lambda:self.info())
+
+        BarraMenu.add_cascade(label="Archivo",menu=archivo)
+        BarraMenu.add_cascade(label="Edición",menu=Editar)
+        BarraMenu.add_cascade(label="Herramientas",menu=Herramientas)
+        BarraMenu.add_cascade(label="Ayuda",menu=Ayuda)
 
         # contenedor principal
         frame = LabelFrame(
@@ -236,16 +360,3 @@ def iniciar():
     Productos(root) # se instancia la pantalla principal
     root.mainloop()
     os.system('cls')
-
-'''Barramenu = Menu(root)
-root.config(menu=Barramenu)
-
-archivoMenu=Menu(Barramenu)
-edicionMenu=Menu(Barramenu)
-herramientasMenu=Menu(Barramenu)
-ayudaMenu=Menu(Barramenu)
-
-Barramenu.add_cascade(label='Archivo',menu=archivoMenu)
-Barramenu.add_cascade(label='Edición',menu=edicionMenu)
-Barramenu.add_cascade(label='Herramientas',menu=herramientasMenu)
-Barramenu.add_cascade(label='Ayuda',menu=ayudaMenu)'''
