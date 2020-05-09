@@ -3,10 +3,10 @@
 block_cipher = None
 
 
-a = Analysis(['InicioSesion.py', 'Main.py', 'Base.py'],
+a = Analysis(['InicioSesion.py'],
              pathex=['C:\\Users\\kunas\\OneDrive\\Documentos\\GitHub\\Proyecto-Final-EDA1\\Código'],
              binaries=[],
-             datas=[],
+             datas=[('./res/*.ico','res'),('./res/*.png','res')],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -19,15 +19,19 @@ pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
-          a.binaries,
-          a.zipfiles,
-          a.datas,
           [],
+          exclude_binaries=True,
           name='InicioSesion',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
-          upx_exclude=[],
-          runtime_tmpdir=None,
-          console=False )
+          console=True )
+coll = COLLECT(exe,
+               a.binaries,
+               a.zipfiles,
+               a.datas,
+               strip=False,
+               upx=True,
+               upx_exclude=[],
+               name='InicioSesion')

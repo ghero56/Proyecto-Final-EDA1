@@ -1,49 +1,67 @@
 from tkinter import *
 import Main
 import Base
+import os
 
-def codigoBoton():
+# comprobar la existencia de bases de datos
+if os.path.isfile("./DataCenter"):
+    print("todo bien todo correcto")
+else:
+    Base.create()
+
+if os.path.isfile("./users"):
+    print("y yo que me alegro")
+else:
+    Base.createOnce()
+
+# función del botón para iniciar
+def codigoBoton(obj):
     comprobar = Base.OnlyRead()
-    if ((UserEn.get() == comprobar[0]) and (PassEn.get() == comprobar[1])):
-        Raiz.destroy()
+    if ((obj.UserEn.get() == comprobar[0]) and (obj.PassEn.get() == comprobar[1])):
+        obj.Raiz.destroy()
         Main.iniciar()
-    else:
-        print('error')
 
-# Raiz
-Raiz=Tk()
-Raiz.title("Iniciar sesión")
+# clase iniciando
+class starting:
+    def __init__(self,base):
+        # raiz
+        self.Raiz=base
+        self.Raiz.iconbitmap("./res/png.ico")
+        self.Raiz.title("Iniciar sesión")
 
-# Frame Principal
-MainFrame=Frame(Raiz)
-MainFrame.grid(row=0,column=0)
+        # Frame Principal
+        MainFrame=Frame(self.Raiz)
+        MainFrame.grid(row=0,column=0)
 
-# Clase Imagen
-imagen=PhotoImage(file="images.png")
+        # Clase Imagen
+        self.imagen=PhotoImage(file="./res/images.png")
 
-# Cuadro de Texto del Titulo
-Titulo=Label(MainFrame, text="Iniciar Sesion",font=("Arial",36))
-Titulo.grid(row=0,column=1,columnspan=2)
+        # Cuadro de Texto del Titulo
+        Titulo=Label(MainFrame, text="Iniciar Sesion",font=("Arial",36))
+        Titulo.grid(row=0,column=1,columnspan=2)
 
-# Apartado del Logo
-Logo=Label(MainFrame,image=imagen)
-Logo.grid(row=0,column=0,rowspan=3)
+        # Apartado del Logo
+        self.Logo=Label(MainFrame,image=self.imagen)
+        self.Logo.grid(row=0,column=0,rowspan=3)
 
-# Cuadro de Texto Para el Usuario
-User=Label(MainFrame,text="Usuario: ")
-User.grid(row=1,column=1)
-User.focus()
-UserEn=Entry(MainFrame)
-UserEn.grid(row=1,column=2)
+        # Cuadro de Texto Para el Usuario
+        User=Label(MainFrame,text="Usuario: ")
+        User.grid(row=1,column=1)
+        User.focus()
+        self.UserEn=Entry(MainFrame)
+        self.UserEn.grid(row=1,column=2)
 
-# Cuadro de Texto Para la Contraseña
-Pass=Label(MainFrame,text="Contraseña: ")
-Pass.grid(row=2,column=1)
-PassEn=Entry(MainFrame)
-PassEn.grid(row=2,column=2)
-PassEn.config(show="·")
+        # Cuadro de Texto Para la Contraseña
+        Label(MainFrame,text="Contraseña: ").grid(row=2,column=1)
+        self.PassEn=Entry(MainFrame)
+        self.PassEn.grid(row=2,column=2)
+        self.PassEn.config(show="·")
 
-ContinuarBoton=Button(MainFrame, text="Continuar", command=lambda:codigoBoton())
-ContinuarBoton.grid(row=3,column=1)
+        ContinuarBoton=Button(MainFrame, text="Continuar", command=lambda:codigoBoton(self))
+        ContinuarBoton.grid(row=3,column=1)
 
-Raiz.mainloop()
+# comprobar la clase para ejecutar el programa
+if __name__ == '__main__':
+    base = Tk()
+    starting(base)
+    base.mainloop()

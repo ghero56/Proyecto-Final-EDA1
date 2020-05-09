@@ -1,4 +1,4 @@
-import os
+# programa principal para la ventana de productos
 from tkinter import ttk
 from tkinter import *
 from tkinter import messagebox
@@ -6,30 +6,48 @@ from tkinter import messagebox
 import Base
 
 class Productos:
+    def advice(self,texto):
+        texto = texto + '.txt'
+        archive = open(texto,'w')
+        residual = Base.read()
+        for i in residual:
+            for j in i:
+                archive.writelines(str(j)+" ")
+            archive.writelines("\n")
+        archive.close()
+
+    def save(self):
+        self.saving = Toplevel()
+        self.saving.title="Guardar en archivo externo"
+        Label(self.saving,text="Ingresa el nombre del archivo a crear: ").grid(row=0,column=0)
+        self.guardar = Entry(self.saving).grid(row=0,column=1,columnspan=2)
+        Button(self.saving, text="guardar", command=lambda:self.advice(str(self.guardar))).grid(row=1,column=0,columnspan=3)
+
     def info(self):
         messagebox.showinfo('Gestor Universal', 'Proyecto Final de Estructuras de Datos y Algoritmos 1\n\nHecho por: Fernando Arciga Guzmán\n\nAsesorado por: Marco Antonio Martinez Quintana')
 
-    def guarninguser(self,n,N):
+    def guarninguser(self,n,N): # advertencia de cambio de usuario
         valor=messagebox.askokcancel('Gestor Universal', ('Realmente deseas cambiar el usuario {} por {}').format(n,N))
         if valor:
             self.nameedit.destroy()
             Base.CambioContra("user",N)
 
-    def guarningcontra(self,n,N):
+    def guarningcontra(self,n,N): # advertencia de cambio de contraseña
         valor=messagebox.askokcancel('Gestor Universal', ('Realmente deseas cambiar la contraseña {} por {}').format(n,N))
         if valor:
             self.conedit.destroy()
             Base.CambioContra("con",N)
 
-    def exit(self):
+    def exit(self): # salir con el boton en casacada
         valor=messagebox.askquestion("Saliendo", "¿Realmente deseas salir?")
         if valor == "yes":
             self.wind.destroy()
 
-    def Usrio(self):
+    def Usrio(self): # cambiar usuario
         compro = Base.OnlyRead()
         self.nameedit = Toplevel() # ventana encima de la anterior
         self.nameedit.title="Edición de cuentas"
+        # nombre anterior
         Label(
             self.nameedit,
             text="Nombre Actual"
@@ -223,13 +241,14 @@ class Productos:
 
     def __init__(self,root):
         self.wind = root # se coloca la raiz dentro de un atributo de la clase
+        self.wind.iconbitmap('./res/png.ico')
         BarraMenu = Menu(self.wind)
         self.wind.config(menu=BarraMenu)
         self.wind.title("Gestión de Productos")
 
         archivo=Menu(BarraMenu,tearoff=0)
         archivo.add_command(label="Nueva Tabla")
-        archivo.add_command(label="Guardar como...")
+        archivo.add_command(label="Guardar como...",command=lambda:self.save())
         archivo.add_separator()
         archivo.add_command(label="Salir",command=lambda:self.exit())
 
@@ -359,4 +378,3 @@ def iniciar():
     root = Tk()
     Productos(root) # se instancia la pantalla principal
     root.mainloop()
-    os.system('cls')
