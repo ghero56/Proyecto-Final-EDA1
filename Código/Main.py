@@ -28,18 +28,22 @@ class Productos:
     def hidalgo(self): # paste pegar
         self.Mensaje['text'] = '' # vaciamos los mensajes anteriores
         texto = scrolledtext.ScrolledText(self.wind) # creamos la variable de tkinter para mandar al portapapeles
-        portapapeles = texto.clipboard_get() # guardamos el texto en el portapapeles
-        if portapapeles != '':
-            nombre = ""
-            precio = ""
-            for i in portapapeles:
-                if i.isdigit():
-                    precio = precio + i
-                else:
-                    nombre = nombre + i
-        else:
+        try:
+            texto.clipboard_get() # guardamos el texto en el portapapeles
+        except IndexError as e:
             self.Mensaje['fg'] = 'red'
             self.Mensaje['text'] = 'Copia un dato con el formato "precio valor"'
+            return
+        portapapeles = texto.clipboard_get()
+        nombre = ""
+        precio = ""
+        for i in portapapeles:
+            if i.isdigit():
+                precio = precio + i
+            elif(i == "."):
+                precio = precio + i
+            else:
+                nombre = nombre + i
         parametro = (nombre, precio)
         Base.add(parametro)
         self.LlenarArbol()
