@@ -17,7 +17,7 @@ else:
 # función del botón para iniciar
 def codigoBoton(obj):
     comprobar = Base.OnlyRead()
-    if ((obj.UserEn.get() == comprobar[0]) and (obj.PassEn.get() == comprobar[1])):
+    if ((obj.User.get() == comprobar[0]) and (obj.Pass.get() == comprobar[1])):
         obj.Raiz.destroy()
         Main.iniciar()
 
@@ -25,43 +25,41 @@ def codigoBoton(obj):
 class starting:
     def __init__(self,base):
         # raiz
-        self.Raiz=base
-        self.Raiz.iconbitmap("./res/png.ico")
+        self.Raiz = base
+        self.Raiz.iconbitmap("./res/Logo.ico")
         self.Raiz.title("Iniciar sesión")
 
         # Frame Principal
-        MainFrame=Frame(self.Raiz)
+        MainFrame = Frame(self.Raiz)
         MainFrame.grid(row=0,column=0)
 
         # Clase Imagen
-        self.imagen=PhotoImage(file="./res/images.png")
+        self.imagen = PhotoImage(file="./res/images.png")
 
         # Cuadro de Texto del Titulo
-        Titulo=Label(MainFrame, text="Iniciar Sesion",font=("Arial",36))
+        Titulo = Label(MainFrame, text="Iniciar Sesion",font=("Arial",36))
         Titulo.grid(row=0,column=1,columnspan=2)
 
         # Apartado del Logo
-        self.Logo=Label(MainFrame,image=self.imagen)
+        self.Logo = Label(MainFrame,image=self.imagen)
         self.Logo.grid(row=0,column=0,rowspan=3)
 
         # Cuadro de Texto Para el Usuario
-        User=Label(MainFrame,text="Usuario: ")
-        User.grid(row=1,column=1)
-        User.focus()
-        self.UserEn=Entry(MainFrame)
-        self.UserEn.grid(row=1,column=2)
+        Label(MainFrame,text="Usuario: ").grid(row=1,column=1)
+        self.User = Entry(MainFrame)
+        self.User.grid(row=1,column=2)
 
         # Cuadro de Texto Para la Contraseña
         Label(MainFrame,text="Contraseña: ").grid(row=2,column=1)
-        self.PassEn=Entry(MainFrame)
-        self.PassEn.grid(row=2,column=2)
-        self.PassEn.config(show="·")
+        self.Pass = Entry(MainFrame)
+        self.Pass.grid(row=2,column=2)
+        self.Pass.config(show="·")
 
-        ContinuarBoton=Button(MainFrame, text="Continuar", command=lambda:codigoBoton(self))
+        ContinuarBoton = Button(MainFrame, text="Continuar", command=lambda:codigoBoton(self))
         ContinuarBoton.grid(row=3,column=1)
 
 # comprobar la clase para ejecutar el programa
 if __name__ == '__main__':
     base = Tk()
-    starting(base)
+    starting(base) # instanciamos la clase starting
     base.mainloop()

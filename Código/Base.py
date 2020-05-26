@@ -58,10 +58,7 @@ def create(): # creación única de la tabla productos
 def remove(param): # borrar productos
     Conexión = sqlite3.connect("DataCenter")
     Cursor = Conexión.cursor()
-    Cursor.execute(
-        f4,
-        (param,)
-    )
+    Cursor.execute(f4,(param,))
     Conexión.commit()
     Conexión.close()
 
@@ -76,23 +73,17 @@ def read(): # lectura de productos
 def add(param): # añadir producto
     Conexión = sqlite3.connect("DataCenter")
     Cursor = Conexión.cursor()
-    Cursor.execute(
-        f3,
-        param
-    )
+    Cursor.execute(f3,param)
     Conexión.commit()
     Conexión.close()
 
 def edit(Raiz,N,P,n,p): # editar un producto
-    param=(N,P,n,p)
-    Conexión = sqlite3.connect("DataCenter")
-    Cursor = Conexión.cursor()
-    Cursor.execute(
-        f5,
-        param
-    )
-    Conexión.commit()
-    Conexión.close()
+    param = (N,P,n,p)
+    Conexión = sqlite3.connect("DataCenter") # nos conectamos a la base
+    Cursor = Conexión.cursor() # se crea el cursor para modificar la base
+    Cursor.execute(f5,param) # se ejecuta un comando en la base y se mandan los parametros para complementar
+    Conexión.commit() # se guardan los cambios en la base
+    Conexión.close() # se cierra la conexión a la base de datos
     Raiz.edicion.destroy() # se destruye la ventana
     Raiz.Mensaje['text'] = 'Artículo {} actualizado correctamente'.format(n)
     Raiz.LlenarArbol()
