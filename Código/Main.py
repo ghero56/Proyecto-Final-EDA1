@@ -26,10 +26,10 @@ class Productos:
         self.BorrarProd() # se borra el valor seleccionado
 
     def hidalgo(self): # paste pegar
-        self.Mensaje['text'] = ''
+        self.Mensaje['text'] = '' # vaciamos los mensajes anteriores
         texto = scrolledtext.ScrolledText(self.wind) # creamos la variable de tkinter para mandar al portapapeles
         portapapeles = texto.clipboard_get() # guardamos el texto en el portapapeles
-        if len(portapapeles):
+        if portapapeles != '':
             nombre = ""
             precio = ""
             for i in portapapeles:

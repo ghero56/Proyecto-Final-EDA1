@@ -78,12 +78,18 @@ def add(param): # añadir producto
     Conexión.close()
 
 def edit(Raiz,N,P,n,p): # editar un producto
-    param = (N,P,n,p)
-    Conexión = sqlite3.connect("DataCenter") # nos conectamos a la base
-    Cursor = Conexión.cursor() # se crea el cursor para modificar la base
-    Cursor.execute(f5,param) # se ejecuta un comando en la base y se mandan los parametros para complementar
-    Conexión.commit() # se guardan los cambios en la base
-    Conexión.close() # se cierra la conexión a la base de datos
-    Raiz.edicion.destroy() # se destruye la ventana
-    Raiz.Mensaje['text'] = 'Artículo {} actualizado correctamente'.format(n)
-    Raiz.LlenarArbol()
+    if (N and P):
+        param = (N,P,n,p)
+        Conexión = sqlite3.connect("DataCenter") # nos conectamos
+        Cursor = Conexión.cursor() # se crea el cursor para modificar la base
+        Cursor.execute(f5,param) # se ejecuta un comando en la base y se mandan los parametros para complementar
+        Conexión.commit() # se guardan los cambios en la base
+        Conexión.close() # se cierra la conexión a la base de datos
+        Raiz.edicion.destroy() # se destruye la ventana
+        Raiz.Mensaje['fg'] = 'green'
+        Raiz.Mensaje['text'] = 'Artículo {} actualizado correctamente'.format(n)
+        Raiz.LlenarArbol()
+    else:
+        Raiz.edicion.destroy() # se destruye la ventana
+        Raiz.Mensaje['fg'] = 'red'
+        Raiz.Mensaje['text'] = 'Artículo {} actualizado incorrectamente'.format(n)
