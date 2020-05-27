@@ -68,19 +68,19 @@ class Productos:
         Button(self.saving,  text = "guardar",  command = lambda:self.advice(str(self.guardar))).grid(row = 1, column = 0, columnspan = 3)
 
     def info(self): # informacion del programa
-        messagebox.showinfo('Gestor Universal', 'Proyecto Final de Estructuras de Datos y Algoritmos 1\n\nHecho por: Fernando Arciga Guzmán\nÁngel David Valenzuela Vigil\n\nAsesorados por: Marco Antonio Martínez Quintana')
+        messagebox.showinfo('Gestor Universal', 'Proyecto Final de Estructuras de Datos y Algoritmos 1\n\nHecho por:\n\n\t Fernando Arciga Guzmán\n\tÁngel David Valenzuela Vigil\n\nAsesorados por: Marco Antonio Martínez Quintana')
 
     def guarninguser(self, n, N): # advertencia de cambio de usuario (n = nombre anterior,  N = nombre nuevo)
         valor = messagebox.askokcancel('Gestor Universal', ('¿Realmente deseas cambiar el usuario {} por {}?').format(n, N))
         if valor:
             self.nameedit.destroy()
-            Base.CambioContra("user", N) # el primer valor es el tipo de cambio
+            Base.Cambio_InicioSesion("user", N) # el primer valor es el tipo de cambio
 
     def guarningcontra(self, n, N): # advertencia de cambio de contraseña (n = contraseña anterior,  N =  nueva contraseña)
         valor = messagebox.askokcancel('Gestor Universal', ('¿Realmente deseas cambiar la contraseña {} por {}?').format(n, N))
         if valor:
             self.conedit.destroy()
-            Base.CambioContra("con", N) # el primer valor es el tipo de cambio
+            Base.Cambio_InicioSesion("con", N) # el primer valor es el tipo de cambio
 
     def exit(self): # salir con el boton en casacada
         valor = messagebox.askquestion("Saliendo",  "¿Realmente deseas salir?")

@@ -20,7 +20,7 @@ def createOnce(): # creación única de la tabla usuarios
     Cursor = Conexión.cursor()
     Cursor.execute(fy)
     Conexión.commit()
-    Cursor.execute(fz,('fernando','root'))
+    Cursor.execute(fz,('root','root'))
     Conexión.commit()
     Conexión.close()
 
@@ -33,7 +33,7 @@ def OnlyRead(): # lectura única de la tabla
     Conexión.commit()
     Conexión.close()
 
-def CambioContra(tipo,cambios): # cambiar usuario/contraseña
+def Cambio_InicioSesion(tipo,cambios): # cambiar usuario/contraseña
     old = OnlyRead()
     list = (cambios,old[0],old[1])
     if tipo == "user":
