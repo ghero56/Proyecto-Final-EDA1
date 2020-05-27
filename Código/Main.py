@@ -42,6 +42,8 @@ class Productos:
                 precio = precio + i
             elif(i == "."):
                 precio = precio + i
+            elif(i == " "):
+                nombre = nombre
             else:
                 nombre = nombre + i
         parametro = (nombre, precio)
@@ -215,7 +217,7 @@ class Productos:
         BarraMenu.add_cascade(label = "Archivo", menu = Archivo)
         BarraMenu.add_cascade(label = "Edición", menu = Editar)
         BarraMenu.add_cascade(label = "Herramientas", menu = Herramientas)
-        BarraMenu.add_cascade(label = "información", menu = Info)
+        BarraMenu.add_cascade(label = "Información", menu = Info)
 
         # contenedor principal
         frame = LabelFrame(self.wind, text = "Registrar nuevo producto")
