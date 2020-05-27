@@ -16,10 +16,23 @@ else:
 
 # función del botón para iniciar
 def codigoBoton(obj):
-    comprobar = Base.OnlyRead()
-    if ((obj.User.get() == comprobar[0]) and (obj.Pass.get() == comprobar[1])):
+    datos = []
+    DatosEnBase = Base.OnlyRead()
+    for i in DatosEnBase:
+        datos.append(i)
+    if ((obj.User.get() == datos[0][1]) and (obj.Pass.get() == datos[0][2])):
         obj.Raiz.destroy()
-        Main.iniciar()
+        Main.IniciarAlpha()
+    elif ((obj.User.get() == datos[1][1]) and (obj.Pass.get() == datos[1][2])):
+        obj.Raiz.destroy()
+        Main.IniciarBeta()
+    elif ((obj.User.get() == datos[2][1]) and (obj.Pass.get() == datos[2][2])):
+        obj.Raiz.destroy()
+        Main.IniciarGamma()
+    else:
+        print("\a") # sonido del sistema
+        self.User.delete(0, END) # vaciamos la entrada
+        self.Pass.delete(0, END) # vaciamos la entrada
 
 # clase iniciando
 class starting:

@@ -9,9 +9,9 @@ f4 = "DELETE FROM products WHERE NOMBRE_ARTICULO = ?"
 f5 = "UPDATE products SET NOMBRE_ARTICULO = ?, PRECIO = ? WHERE NOMBRE_ARTICULO = ? AND PRECIO = ?"
 
 # funciones para la base de usuarios
-fy = "CREATE TABLE users (Usuario VARCHAR(8), Contrasena VARCHAR(10))"
+fy = "CREATE TABLE users (ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, Usuario VARCHAR(8), Contrasena VARCHAR(10))"
 fx = "SELECT * FROM users"
-fz = "INSERT INTO users VALUES(?, ?)"
+fz = "INSERT INTO users VALUES(NULL, ?, ?)"
 fc = "UPDATE users SET Usuario = ? WHERE Usuario = ? AND Contrasena = ?"
 fu = "UPDATE users SET Contrasena = ? WHERE Usuario = ? AND Contrasena = ?"
 
@@ -22,14 +22,17 @@ def createOnce(): # creación única de la tabla usuarios
     Conexión.commit()
     Cursor.execute(fz,('root','root'))
     Conexión.commit()
+    Cursor.execute(fz,('beta','beta'))
+    Conexión.commit()
+    Cursor.execute(fz,('gamma','gamma'))
+    Conexión.commit()
     Conexión.close()
 
 def OnlyRead(): # lectura única de la tabla
     Conexión = sqlite3.connect("users")
     Cursor = Conexión.cursor()
     comprobante = Cursor.execute(fx)
-    for i in comprobante:
-        return i
+    return comprobante
     Conexión.commit()
     Conexión.close()
 
@@ -92,4 +95,4 @@ def edit(Raiz,N,P,n,p): # editar un producto
     else:
         Raiz.edicion.destroy() # se destruye la ventana
         Raiz.Mensaje['fg'] = 'red'
-        Raiz.Mensaje['text'] = 'Artículo {} actualizado incorrectamente'.format(n)
+        Raiz.Mensaje['text'] = 'Artículo {} actualizado incorrectamente\nFALTAN DATOS'.format(n)
