@@ -164,7 +164,6 @@ class Alpha:
             for i in valores:
                 j.append(i)
             for valores in j:
-                print(j)
                 if n == valores[1]:
                     if c == valores[2]:
                         Base.Cambio_InicioSesion("kami",[C,N,n,c])
@@ -641,7 +640,6 @@ class Gamma:
         self.saving.title = "Guardar en archivo externo"
         Label(self.saving, text = "Ingresa el nombre del archivo a crear: ").pack()
         self.guardar = Entry(self.saving)
-        print(self.guardar)
         self.guardar.pack()
         Button(self.saving,  text = "Guardar",  command = lambda:self.advice(self.guardar.get())).pack()
 

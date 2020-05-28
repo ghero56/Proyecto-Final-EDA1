@@ -5,3 +5,12 @@ Proyecto final en equipo
 
     Arciga Guzmán Fernando
     Valenzuela Vigil Ángel David
+
+contraseñas
+    Master -> root , root
+    solo escritura -> beta , beta
+    solo lectura -> gamma , gamma
+
+la contraseña modificable es la de root, con ella se da permiso para borrar o modificar Datos
+
+ejecutar el archivo "ProyectoFinal.exe"
