@@ -134,7 +134,8 @@ class Alpha:
         self.saving = Toplevel()
         self.saving.title = "Guardar en archivo externo"
         Label(self.saving, text = "Ingresa el nombre del archivo a crear: ").grid(row = 0, column = 0)
-        self.guardar = Entry(self.saving).grid(row = 0, column = 1, columnspan = 2)
+        self.guardar = Entry(self.saving)
+        self.guardar.grid(row = 0, column = 1, columnspan = 2)
         Button(self.saving,  text = "Guardar",  command = lambda:self.advice(self.guardar.get())).grid(row = 1, column = 0, columnspan = 3)
 
     def info(self): # informacion del programa
