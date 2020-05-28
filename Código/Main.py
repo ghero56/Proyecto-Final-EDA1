@@ -19,6 +19,20 @@ def lecturaUsuariosBorrar(obj,texto):
         obj.Mensaje['fg'] = 'red'
         obj.Mensaje['text'] = 'Contraseña incorrecta'
 
+def lecturaUsuariosBorrar(obj,texto):
+    j = []
+    valores = Base.OnlyRead()
+    for i in valores:
+        j.append(i)
+    if texto == j[0][2]:
+        obj.BorrarProd()
+        obj.Volatil.destroy()
+    else:
+        print("\a")
+        obj.Volatil.destroy()
+        obj.Mensaje['fg'] = 'red'
+        obj.Mensaje['text'] = 'Contraseña incorrecta'
+
 def lecturaUsuariosEditar(obj,texto):
     j = []
     valores = Base.OnlyRead()
@@ -99,71 +113,145 @@ class Alpha:
         self.LlenarArbol()
 
     def advice(self, texto): # funcion consejo
-        texto = texto + '.txt'
-        archive = open(texto, 'w')
-        residual = Base.read()
-        for i in residual:
-            for j in i:
-                archive.writelines(str(j)+" ")
-            archive.writelines("\n")
-        archive.close()
+        if len(texto):
+            texto = texto + '.txt'
+            archive = open(texto, 'w')
+            residual = Base.read()
+            for i in residual:
+                for j in i:
+                    archive.writelines(str(j)+" ")
+                archive.writelines("\n")
+            archive.close()
+            self.saving.destroy()
+            self.Mensaje['text'] = ''
+        else:
+            print("\a")
+            self.saving.destroy()
+            self.Mensaje['fg'] = 'red'
+            self.Mensaje['text'] = 'Datos Faltantes'
 
     def save(self): # funcion guardar en otro archivo
         self.saving = Toplevel()
         self.saving.title = "Guardar en archivo externo"
         Label(self.saving, text = "Ingresa el nombre del archivo a crear: ").grid(row = 0, column = 0)
         self.guardar = Entry(self.saving).grid(row = 0, column = 1, columnspan = 2)
-        Button(self.saving,  text = "guardar",  command = lambda:self.advice(self.guardar.get())).grid(row = 1, column = 0, columnspan = 3)
+        Button(self.saving,  text = "Guardar",  command = lambda:self.advice(self.guardar.get())).grid(row = 1, column = 0, columnspan = 3)
 
     def info(self): # informacion del programa
         messagebox.showinfo('Gestor Universal', 'Proyecto Final de Estructuras de Datos y Algoritmos 1\n\nHecho por:\n\n\t Fernando Arciga Guzmán\n\tÁngel David Valenzuela Vigil\n\nAsesorados por: Marco Antonio Martínez Quintana')
 
-    def guarninguser(self, n, N): # advertencia de cambio de usuario (n = nombre anterior,  N = nombre nuevo)
-        valor = messagebox.askokcancel('Gestor Universal', ('¿Realmente deseas cambiar el usuario {} por {}?').format(n, N))
+    def guarninguser(self, todo, N): # advertencia de cambio de usuario (n = nombre anterior,  N = nombre nuevo)
+        valor = messagebox.askokcancel('Gestor Universal', ('¿Realmente deseas cambiar el usuario {} por {}?').format(todo[1], N))
         if valor:
             self.nameedit.destroy()
-            Base.Cambio_InicioSesion("user", N) # el primer valor es el tipo de cambio
+            Base.Cambio_InicioSesion("user", (N, todo[1], todo[2])) # el primer valor es el tipo de cambio
+            self.Mensaje['fg'] = 'green'
+            self.Mensaje['text'] = 'Usuario cambiado con éxito'
 
-    def guarningcontra(self, n, N): # advertencia de cambio de contraseña (n = contraseña anterior,  N =  nueva contraseña)
-        valor = messagebox.askokcancel('Gestor Universal', ('¿Realmente deseas cambiar la contraseña {} por {}?').format(n, N))
+    def guarningcontra(self, todo, N): # advertencia de cambio de contraseña (n = contraseña anterior,  N =  nueva contraseña)
+        valor = messagebox.askokcancel('Gestor Universal', ('¿Realmente deseas cambiar la contraseña {} por {}?').format(todo[2], N))
         if valor:
+            Base.Cambio_InicioSesion("con", (N, todo[1], todo[2])) # el primer valor es el tipo de cambio
             self.conedit.destroy()
-            Base.Cambio_InicioSesion("con", N) # el primer valor es el tipo de cambio
+            self.Mensaje['fg'] = 'green'
+            self.Mensaje['text'] = 'Contraseña cambiada con éxito'
+
+    def guarningGeneral(self,n,c,N,C):
+        if n and c and N and C:
+            j = []
+            valores = Base.OnlyRead()
+            for i in valores:
+                j.append(i)
+            for valores in j:
+                print(j)
+                if n == valores[1]:
+                    if c == valores[2]:
+                        Base.Cambio_InicioSesion("kami",[C,N,n,c])
+                        self.nameedit.destroy()
+                        self.Mensaje['fg'] = 'green'
+                        self.Mensaje['text'] = ('Actualizado el usuario ' + n.title() + " correctamente")
+                    else:
+                        print("\a")
+                        self.nameedit.destroy()
+                        self.Mensaje['fg'] = 'red'
+                        self.Mensaje['text'] = 'Datos Erroneos'
+        else:
+            print("\a")
+            self.nameedit.destroy()
+            self.Mensaje['fg'] = 'red'
+            self.Mensaje['text'] = 'Datos Faltantes'
+        self.nameedit.destroy()
 
     def exit(self): # salir con el boton en casacada
         valor = messagebox.askquestion("Saliendo",  "¿Realmente deseas salir?")
         if valor == "yes":
             self.wind.destroy() # termina el programa
 
+    def JoanSebastian(self):
+        self.nameedit = Toplevel() # ventana encima de la anterior
+        self.nameedit.title = "Edición de cuentas globales" # titulo de la ventana
+
+        # nombre anterior
+        Label(self.nameedit, text = "Nombre Actual").grid(row = 0, column = 1)
+        NombreAnterior = Entry(self.nameedit)
+        NombreAnterior.grid(row = 0, column = 2)
+        NombreAnterior.config(show="·")
+
+        # nuevo nombre
+        Label(self.nameedit, text = 'Nuevo Nombre').grid(row = 1, column = 1)
+        nuevoNombre = Entry(self.nameedit)
+        nuevoNombre.grid(row = 1, column = 2)
+        nuevoNombre.config(show="·")
+
+        # nombre anterior
+        Label(self.nameedit, text = "Contraseña Actual").grid(row = 2, column = 1)
+        ContraseñaActual = Entry(self.nameedit)
+        ContraseñaActual.grid(row = 2, column = 2)
+        ContraseñaActual.config(show="·")
+
+        # nuevo nombre
+        Label(self.nameedit, text = 'Nueva Contraseña').grid(row = 3, column = 1)
+        nuevaContra = Entry(self.nameedit)
+        nuevaContra.grid(row = 3, column = 2)
+        nuevaContra.config(show="·")
+
+        Button(self.nameedit, text = 'Actualizar', command = lambda:self.guarningGeneral(NombreAnterior.get(), ContraseñaActual.get(), nuevoNombre.get(), nuevaContra.get())).grid(row = 4, column = 2, sticky = W)
+
     def Usrio(self): # cambiar usuario
+        listaUsuarios = []
         compro = Base.OnlyRead()  # variable compro recibe dos valores (usuario,  contraseña)
+        for i in compro:
+            listaUsuarios.append(i)
         self.nameedit = Toplevel() # ventana encima de la anterior
         self.nameedit.title = "Edición de cuentas" # titulo de la ventana
 
         # nombre anterior
         Label(self.nameedit, text = "Nombre Actual").grid(row = 0, column = 1)
-        Entry(self.nameedit, textvariable = StringVar(self.nameedit, value = compro[0]), state = 'readonly').grid(row = 0, column = 2)
+        Entry(self.nameedit, textvariable = StringVar(self.nameedit, value = listaUsuarios[0][1]), state = 'readonly').grid(row = 0, column = 2)
 
         # nuevo nombre
         Label(self.nameedit, text = 'Nuevo Nombre').grid(row = 1, column = 1)
         nuevoDatoN = Entry(self.nameedit)
         nuevoDatoN.grid(row = 1, column = 2)
-        Button(self.nameedit, text = 'Actualizar', command = lambda:self.guarninguser(compro[0], nuevoDatoN.get())).grid(row = 4, column = 2, sticky = W)
+        Button(self.nameedit, text = 'Actualizar', command = lambda:self.guarninguser(listaUsuarios[0], nuevoDatoN.get())).grid(row = 4, column = 2, sticky = W)
 
     def Consena(self): # cambiar contraseña
+        listaUsuarios = []
         compro = Base.OnlyRead() # variable compro recibe dos valores (usuario,  contraseña)
+        for i in compro:
+            listaUsuarios.append(i)
         self.conedit = Toplevel() # ventana encima de la anterior
         self.conedit.title = "Edición de cuentas" # titulo de la ventana
 
         # nombre anterior
         Label(self.conedit, text = "Contraseña Actual").grid(row = 0, column = 1)
-        Entry(self.conedit, textvariable = StringVar(self.conedit, value = compro[1]), state = 'readonly').grid(row = 0, column = 2)
+        Entry(self.conedit, textvariable = StringVar(self.conedit, value = listaUsuarios[0][2]), state = 'readonly').grid(row = 0, column = 2)
 
         # nuevo nombre
         Label(self.conedit, text = 'Nueva Contraseña').grid(row = 1, column = 1)
         nuevoDatoN = Entry(self.conedit)
         nuevoDatoN.grid(row = 1, column = 2)
-        Button(self.conedit, text = 'Actualizar', command = lambda:self.guarningcontra("con", nuevoDatoN.get())).grid(row = 4, column = 2, sticky = W)
+        Button(self.conedit, text = 'Actualizar', command = lambda:self.guarningcontra(listaUsuarios[0] ,nuevoDatoN.get())).grid(row = 4, column = 2, sticky = W)
 
     def LlenarArbol(self): # funcion para actualizar la tabla
         # para limpiar el arbol
@@ -256,8 +344,9 @@ class Alpha:
         Editar.add_command(label = "Eliminar", command = lambda:self.BorrarProd())
 
         Herramientas = Menu(BarraMenu, tearoff = 0)
-        Herramientas.add_command(label = "Cambiar Usuario", command = lambda:self.Usrio())
-        Herramientas.add_command(label = "Cambiar Contraseña", command = lambda:self.Consena())
+        Herramientas.add_command(label = "Cambiar Usuario (actual)", command = lambda:self.Usrio())
+        Herramientas.add_command(label = "Cambiar Contraseña (actual)", command = lambda:self.Consena())
+        Herramientas.add_command(label = "Cambiar Usuario y Contraseña (cualquier usuario)", command = lambda:self.JoanSebastian())
 
         Info = Menu(BarraMenu, tearoff = 0)
         Info.add_command(label = "Acerca de...", command = lambda:self.info())
@@ -370,7 +459,7 @@ class Beta:
         Label(self.saving, text = "Ingresa el nombre del archivo a crear: ").grid(row = 0, column = 0)
         self.guardar = Entry(self.saving)
         self.guardar.grid(row = 0, column = 1, columnspan = 2)
-        Button(self.saving,  text = "guardar",  command = lambda:self.advice(self.guardar.get())).grid(row = 1, column = 0, columnspan = 3)
+        Button(self.saving,  text = "Guardar",  command = lambda:self.advice(self.guardar.get())).grid(row = 1, column = 0, columnspan = 3)
 
     def info(self): # informacion del programa
         messagebox.showinfo('Gestor Universal', 'Proyecto Final de Estructuras de Datos y Algoritmos 1\n\nHecho por:\n\n\t Fernando Arciga Guzmán\n\tÁngel David Valenzuela Vigil\n\nAsesorados por: Marco Antonio Martínez Quintana')
@@ -528,16 +617,22 @@ class Gamma:
         texto.clipboard_append(portapapeles) # guardamos el texto en el portapapeles
 
     def advice(self, texto): # funcion consejo
-        texto = texto + '.txt'
-        archive = open(texto, 'w')
-        residual = Base.read()
-        for i in residual:
-            print(i)
-            for j in i:
-                archive.writelines(str(j) + " ")
-            archive.writelines("\n")
-        archive.close()
-        self.saving.destroy()
+        if len(texto):
+            texto = texto + '.txt'
+            archive = open(texto, 'w')
+            residual = Base.read()
+            for i in residual:
+                for j in i:
+                    archive.writelines(str(j)+" ")
+                archive.writelines("\n")
+            archive.close()
+            self.saving.destroy()
+            self.Mensaje['text'] = ''
+        else:
+            print("\a")
+            self.saving.destroy()
+            self.Mensaje['fg'] = 'red'
+            self.Mensaje['text'] = 'Datos Faltantes'
 
     def save(self): # funcion guardar en otro archivo
         self.saving = Toplevel()
@@ -547,7 +642,7 @@ class Gamma:
         self.guardar = Entry(self.saving)
         print(self.guardar)
         self.guardar.pack()
-        Button(self.saving,  text = "guardar",  command = lambda:self.advice(self.guardar.get())).pack()
+        Button(self.saving,  text = "Guardar",  command = lambda:self.advice(self.guardar.get())).pack()
 
     def info(self): # informacion del programa
         messagebox.showinfo('Gestor Universal', 'Proyecto Final de Estructuras de Datos y Algoritmos 1\n\nHecho por:\n\n\t Fernando Arciga Guzmán\n\tÁngel David Valenzuela Vigil\n\nAsesorados por: Marco Antonio Martínez Quintana')

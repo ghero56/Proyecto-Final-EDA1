@@ -20,6 +20,7 @@ def codigoBoton(obj):
     DatosEnBase = Base.OnlyRead()
     for i in DatosEnBase:
         datos.append(i)
+    print(datos)
     if ((obj.User.get() == datos[0][1]) and (obj.Pass.get() == datos[0][2])):
         obj.Raiz.destroy()
         Main.IniciarAlpha()
@@ -31,8 +32,8 @@ def codigoBoton(obj):
         Main.IniciarGamma()
     else:
         print("\a") # sonido del sistema
-        self.User.delete(0, END) # vaciamos la entrada
-        self.Pass.delete(0, END) # vaciamos la entrada
+        obj.User.delete(0, END) # vaciamos la entrada
+        obj.Pass.delete(0, END) # vaciamos la entrada
 
 # clase iniciando
 class starting:

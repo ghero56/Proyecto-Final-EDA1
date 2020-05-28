@@ -37,18 +37,32 @@ def OnlyRead(): # lectura única de la tabla
     Conexión.close()
 
 def Cambio_InicioSesion(tipo,cambios): # cambiar usuario/contraseña
-    old = OnlyRead()
-    list = (cambios,old[0],old[1])
     if tipo == "user":
         Conexión = sqlite3.connect("users")
         Cursor = Conexión.cursor()
-        Cursor.execute(fc,list)
+        Cursor.execute(fc,cambios)
+        Conexión.commit()
+        Conexión.close()
+    elif tipo == "kami":
+        user = []
+        user.append(cambios[1])
+        user.append(cambios[2])
+        user.append(cambios[3])
+        contra = []
+        contra.append(cambios[0])
+        contra.append(cambios[2])
+        contra.append(cambios[3])
+        Conexión = sqlite3.connect("users")
+        Cursor = Conexión.cursor()
+        Cursor.execute(fc,user)
+        Conexión.commit()
+        Cursor.execute(fu,contra)
         Conexión.commit()
         Conexión.close()
     else:
         Conexión = sqlite3.connect("users")
         Cursor = Conexión.cursor()
-        Cursor.execute(fu,list)
+        Cursor.execute(fu,cambios)
         Conexión.commit()
         Conexión.close()
 
