@@ -68,7 +68,14 @@ def PermisoAdministradorEdicion(objeto):
     Button(objeto.Volatil,  text = "Continuar",  command = lambda:lecturaUsuariosEditar(objeto,objeto.permiso.get())).grid(row = 1, column = 0, columnspan = 3)
 
 class Alpha:
+    """
+    Clase que contiene métodos relacionados con la manipulación de datos y la interfaz gráfica.
+    """
+
     def copy(self):
+        """
+        Copia el valor seleccionado en la tabla y lo guarda en el portapapeles.
+        """
         try:
             self.tabla.item(self.tabla.selection())['text'][0]
         except IndexError as e:
@@ -84,10 +91,16 @@ class Alpha:
         texto.clipboard_append(portapapeles) # guardamos el texto en el portapapeles
 
     def cut(self):
+        """
+        Copia el valor seleccionado en el portapapeles y lo borra de la tabla.
+        """
         self.copy() # se copia al portapapeles el valor seleccionado
         self.BorrarProd() # se borra el valor seleccionado
 
-    def hidalgo(self): # paste pegar
+    def hidalgo(self):
+        """
+        Pega el valor del portapapeles en la tabla.
+        """
         self.Mensaje['text'] = '' # vaciamos los mensajes anteriores
         texto = scrolledtext.ScrolledText(self.wind) # creamos la variable de tkinter para mandar al portapapeles
         try:
@@ -112,7 +125,16 @@ class Alpha:
         Base.add(parametro)
         self.LlenarArbol()
 
-    def advice(self, texto): # funcion consejo
+    def advice(self, texto):
+        """
+        Guarda los datos en un archivo de texto.
+
+        Args:
+            texto (str): El nombre del archivo a crear.
+
+        Raises:
+            FileNotFoundError: Si no se encuentra el archivo especificado.
+        """
         if len(texto):
             texto = texto + '.txt'
             archive = open(texto, 'w')
@@ -130,7 +152,10 @@ class Alpha:
             self.Mensaje['fg'] = 'red'
             self.Mensaje['text'] = 'Datos Faltantes'
 
-    def save(self): # funcion guardar en otro archivo
+    def save(self):
+        """
+        Abre una ventana para guardar los datos en un archivo externo.
+        """
         self.saving = Toplevel()
         self.saving.title = "Guardar en archivo externo"
         Label(self.saving, text = "Ingresa el nombre del archivo a crear: ").grid(row = 0, column = 0)
@@ -138,10 +163,20 @@ class Alpha:
         self.guardar.grid(row = 0, column = 1, columnspan = 2)
         Button(self.saving,  text = "Guardar",  command = lambda:self.advice(self.guardar.get())).grid(row = 1, column = 0, columnspan = 3)
 
-    def info(self): # informacion del programa
+    def info(self):
+        """
+        Muestra una ventana de diálogo con información sobre el programa.
+        """
         messagebox.showinfo('Gestor Universal', 'Proyecto Final de Estructuras de Datos y Algoritmos 1\n\nHecho por:\n\n\t Fernando Arciga Guzmán\n\tÁngel David Valenzuela Vigil\n\nAsesorados por: Marco Antonio Martínez Quintana')
 
-    def guarninguser(self, todo, N): # advertencia de cambio de usuario (n = nombre anterior,  N = nombre nuevo)
+    def guarninguser(self, todo, N):
+        """
+        Muestra una advertencia y cambia el nombre de usuario.
+
+        Args:
+            todo (tuple): Una tupla que contiene el nombre de usuario anterior, la contraseña y el tipo de cambio.
+            N (str): El nuevo nombre de usuario.
+        """
         valor = messagebox.askokcancel('Gestor Universal', ('¿Realmente deseas cambiar el usuario {} por {}?').format(todo[1], N))
         if valor:
             self.nameedit.destroy()
@@ -149,7 +184,14 @@ class Alpha:
             self.Mensaje['fg'] = 'green'
             self.Mensaje['text'] = 'Usuario cambiado con éxito'
 
-    def guarningcontra(self, todo, N): # advertencia de cambio de contraseña (n = contraseña anterior,  N =  nueva contraseña)
+    def guarningcontra(self, todo, N):
+        """
+        Muestra una advertencia y cambia la contraseña.
+
+        Args:
+            todo (tuple): Una tupla que contiene el nombre de usuario, la contraseña anterior y el tipo de cambio.
+            N (str): La nueva contraseña.
+        """
         valor = messagebox.askokcancel('Gestor Universal', ('¿Realmente deseas cambiar la contraseña {} por {}?').format(todo[2], N))
         if valor:
             Base.Cambio_InicioSesion("con", (N, todo[1], todo[2])) # el primer valor es el tipo de cambio
@@ -158,6 +200,15 @@ class Alpha:
             self.Mensaje['text'] = 'Contraseña cambiada con éxito'
 
     def guarningGeneral(self,n,c,N,C):
+        """
+        Muestra una advertencia y realiza cambios generales en el usuario y la contraseña.
+
+        Args:
+            n (str): El nombre de usuario anterior.
+            c (str): La contraseña anterior.
+            N (str): El nuevo nombre de usuario.
+            C (str): La nueva contraseña.
+        """
         if n and c and N and C:
             j = []
             valores = Base.OnlyRead()
@@ -182,12 +233,18 @@ class Alpha:
             self.Mensaje['text'] = 'Datos Faltantes'
         self.nameedit.destroy()
 
-    def exit(self): # salir con el boton en casacada
+    def exit(self):
+        """
+        Muestra una ventana de confirmación para salir del programa.
+        """
         valor = messagebox.askquestion("Saliendo",  "¿Realmente deseas salir?")
         if valor == "yes":
             self.wind.destroy() # termina el programa
 
     def JoanSebastian(self):
+        """
+        Abre una ventana para editar cuentas globales.
+        """
         self.nameedit = Toplevel() # ventana encima de la anterior
         self.nameedit.title = "Edición de cuentas globales" # titulo de la ventana
 
@@ -213,11 +270,12 @@ class Alpha:
         Label(self.nameedit, text = 'Nueva Contraseña').grid(row = 3, column = 1)
         nuevaContra = Entry(self.nameedit)
         nuevaContra.grid(row = 3, column = 2)
-        nuevaContra.config(show="·")
-
         Button(self.nameedit, text = 'Actualizar', command = lambda:self.guarningGeneral(NombreAnterior.get(), ContraseñaActual.get(), nuevoNombre.get(), nuevaContra.get())).grid(row = 4, column = 2, sticky = W)
 
-    def Usrio(self): # cambiar usuario
+    def Usrio(self):
+        """
+        Abre una ventana para cambiar el nombre de usuario.
+        """
         listaUsuarios = []
         compro = Base.OnlyRead()  # variable compro recibe dos valores (usuario,  contraseña)
         for i in compro:
@@ -235,7 +293,10 @@ class Alpha:
         nuevoDatoN.grid(row = 1, column = 2)
         Button(self.nameedit, text = 'Actualizar', command = lambda:self.guarninguser(listaUsuarios[0], nuevoDatoN.get())).grid(row = 4, column = 2, sticky = W)
 
-    def Consena(self): # cambiar contraseña
+    def Consena(self):
+        """
+        Abre una ventana para cambiar la contraseña.
+        """
         listaUsuarios = []
         compro = Base.OnlyRead() # variable compro recibe dos valores (usuario,  contraseña)
         for i in compro:
@@ -253,7 +314,10 @@ class Alpha:
         nuevoDatoN.grid(row = 1, column = 2)
         Button(self.conedit, text = 'Actualizar', command = lambda:self.guarningcontra(listaUsuarios[0] ,nuevoDatoN.get())).grid(row = 4, column = 2, sticky = W)
 
-    def LlenarArbol(self): # funcion para actualizar la tabla
+    def LlenarArbol(self):
+        """
+        Actualiza la tabla con los datos de la base de datos.
+        """
         # para limpiar el arbol
         residual = self.tabla.get_children() # recibimos los valores en el arbol
         for i in residual:
@@ -264,7 +328,10 @@ class Alpha:
         for datos in Llenar:
             self.tabla.insert("", 0, text = datos[1], values = datos[2]) # se mandan los datos a la interfaz
 
-    def LlenarBase(self): # funcion para llenar la base
+    def LlenarBase(self):
+        """
+        Agrega un producto a la base de datos y actualiza la tabla.
+        """
         if(len(self.Nombre.get()) != 0 and len(self.Precio.get()) != 0):
             Parametros = (self.Nombre.get(), self.Precio.get())
             Base.add(Parametros) # funcion para conectar y ejecutar
@@ -277,7 +344,10 @@ class Alpha:
             self.Mensaje['text'] = 'Datos Faltantes'
         self.LlenarArbol() # mandamos llamar la funcion par aactualizar la pantalla
 
-    def BorrarProd(self): # borra el valor seleccionado del arbol
+    def BorrarProd(self):
+        """
+        Elimina el producto seleccionado de la base de datos y actualiza la tabla.
+        """
         self.Mensaje['text'] = ''
         try:
             self.tabla.item(self.tabla.selection())['text'][0]
@@ -293,6 +363,9 @@ class Alpha:
         self.LlenarArbol()
 
     def EditarProd(self):
+        """
+        Abre una ventana para editar el producto seleccionado.
+        """
         self.Mensaje['text'] = ''
         try:
             self.tabla.item(self.tabla.selection())['text'][0]
