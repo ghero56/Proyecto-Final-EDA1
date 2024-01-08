@@ -15,20 +15,6 @@ fz = "INSERT INTO users VALUES(NULL, ?, ?)"
 fc = "UPDATE users SET Usuario = ? WHERE Usuario = ? AND Contrasena = ?"
 fu = "UPDATE users SET Contrasena = ? WHERE Usuario = ? AND Contrasena = ?"
 
-def createOnce(): # creación única de la tabla usuarios
-    # conectamos con la base de sqlite3
-    Conexión = sqlite3.connect("users")
-    Cursor = Conexión.cursor()
-    Cursor.execute(fy)
-    Conexión.commit()
-    Cursor.execute(fz,('root','root'))
-    Conexión.commit()
-    Cursor.execute(fz,('beta','beta'))
-    Conexión.commit()
-    Cursor.execute(fz,('gamma','gamma'))
-    Conexión.commit()
-    Conexión.close()
-
 def OnlyRead(): # lectura única de la tabla
     Conexión = sqlite3.connect("users")
     Cursor = Conexión.cursor()
