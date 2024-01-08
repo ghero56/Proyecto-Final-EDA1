@@ -16,6 +16,7 @@ fc = "UPDATE users SET Usuario = ? WHERE Usuario = ? AND Contrasena = ?"
 fu = "UPDATE users SET Contrasena = ? WHERE Usuario = ? AND Contrasena = ?"
 
 def createOnce(): # creación única de la tabla usuarios
+    # conectamos con la base de sqlite3
     Conexión = sqlite3.connect("users")
     Cursor = Conexión.cursor()
     Cursor.execute(fy)
